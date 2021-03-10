@@ -18,6 +18,7 @@ def gradient_descent(tolerance, learning_rate, max_iter, a, b, c, x0):
         count += 1
         x0 = x
         j = get_j(a, b, c, x0)
+
     return x0
 
 
@@ -109,7 +110,7 @@ def run_methods(a,b,c,x):
         sol = newton(tol, max_iter, a, b, c, x)
         print('Solution found by Newton:')
         print(sol)
-    else:
+    if path != 1 and path != 2 and path != 3:
         print('Incorrect Option chosen')
 
 
