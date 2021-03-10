@@ -73,22 +73,33 @@ def newton(tolerance, max_iter, a, b, c, x0):
 
 
 def get_func_coeff(dim):
-    print('Enter Numbers for vector b separated by space')
+    print('Enter numbers for vector b separated by space')
     entries = list(map(int, input().split()))
     b = np.array(entries)
-    size_b = b.size
+    while b.size != dim:
+        print(f'Size of vector b must be equal to {dim}. Enter numbers for vector b separated by space')
+        entries = list(map(int, input().split()))
+        b = np.array(entries)
 
-    if dim != size_b:
-        raise Exception('Size of vector b must match d')
-
-    print('Enter Numbers for matrix A in order of each row separated by space')
+    print('Enter numbers for matrix A in order of each row separated by space')
     entries = list(map(int, input().split()))
-    a = np.array(entries).reshape(size_b, size_b)
+    while True:
+        if len(entries) != dim * dim:
+            print(f'Matrix size must be equal to {dim}x{dim}. Enter {dim * dim} numbers')
+            entries = list(map(int, input().split()))
+            continue
+        a = np.array(entries).reshape(b.size, b.size)
+        if np.any(np.linalg.eigvals(a) <= 0):
+            print(f'Matrix must be positive-definite. Enter {dim * dim} numbers')
+            entries = list(map(int, input().split()))
+            continue
+        else:
+            break
 
     print('Enter c')
     c = float(input())
-
     return a,b,c
+
 def get_param():
     print('Enter tolerance')
     tol = float(input())
@@ -122,7 +133,7 @@ path = int(input())
 if path == 1:
     print('Enter dimension')
     dim = int(input())
-    print('Enter Numbers for x separated by space')
+    print('Enter numbers for x separated by space')
     entries = list(map(int, input().split()))
     x_now = np.array(entries)
 
@@ -145,4 +156,3 @@ elif path == 2:
         run_methods(a,b,c,np.array(x))
 else:
     print('Incorrect option entered')
-
