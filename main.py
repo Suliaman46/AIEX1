@@ -56,7 +56,7 @@ def get_func_coeff(dim):
             entries = list(map(int, input().split()))
             continue
         a = np.array(entries).reshape(b.size, b.size)
-        if np.any(np.linalg.eigvals(a) <= 0):
+        if np.any(np.linalg.eigvals(a) <= 0): # Checking if given matrix is positive-definite
             print(f'Matrix must be positive-definite. Enter {dim * dim} numbers')
             entries = list(map(int, input().split()))
             continue
@@ -71,11 +71,19 @@ def get_func_coeff(dim):
 def get_param():
     print('Enter tolerance')
     tol = float(input())
-    print('Enter max iterations')
+    while tol < 0:
+        print('Incorrect input. Enter a non-negative number')
+        tol = float(input())
+    print('Enter limit of iterations')
     max_iter = int(input())
-    print('Enter learning rate (Enter 0 if not applicable)')
+    while max_iter <= 0:
+        print('Incorrect input. Enter a positive number')
+        max_iter = int(input())
+    print('Enter learning rate (Enter 0 is not applicable)')
     learning_rate = float(input())
-
+    while learning_rate < 0:
+        print('Incorrect input. Enter a positive number')
+        learning_rate = int(input())
     return tol, max_iter, learning_rate
 
 
@@ -92,7 +100,7 @@ def run_methods(a, b, c, x):
             sol = newton(tol, max_iter, a, b, c, x)
             solution['Solution by Newton Method: '] = sol
         if path != 1 and path != 2 and path != 3:
-            print('Incorrect Option chosen')
+            print('Incorrect option chosen')
             continue
         return solution
 
@@ -119,7 +127,7 @@ def batch_mode(coeff, params, dim, n, entries):
 
 # MAIN INTERFACE
 
-print('Enter 1 to manually add all data OR 2 to choose range for x/ Batch mode')
+print('Enter 1 to manually add all data OR 2 to choose range for x / Batch mode')
 while True:
     path = int(input())
     if path == 1:
@@ -154,7 +162,7 @@ while True:
                     print(i, solution[i])
                 break
             elif path == 2:
-                print('Enter n - number of time to run methods')
+                print('Enter n - number of times to run methods')
                 n = int(input())
                 batch_mode(get_func_coeff(dim), get_param(), dim, n, entries)
                 break
