@@ -79,11 +79,11 @@ def get_param():
     while max_iter <= 0:
         print('Incorrect input. Enter a positive number')
         max_iter = int(input())
-    print('Enter learning rate (Enter 0 is not applicable)')
+    print('Enter learning rate (Enter 0 if not applicable)')
     learning_rate = float(input())
     while learning_rate < 0:
         print('Incorrect input. Enter a positive number')
-        learning_rate = int(input())
+        learning_rate = float(input())
     return tol, max_iter, learning_rate
 
 
@@ -94,9 +94,12 @@ def run_methods(a, b, c, x):
     while True:
         path = int(input())
         if path == 1 or path == 3:
-            sol,j = gradient_descent(tol, learning_rate, max_iter, a, b, c, x)
-            solution['Solution by Gradient Descent:  '] = sol
-            solution['J(x) by Gradient Descent: '] = j
+            if learning_rate != 0:
+                sol, j = gradient_descent(tol, learning_rate, max_iter, a, b, c, x)
+                solution['Solution by Gradient Descent:  '] = sol
+                solution['J(x) by Gradient Descent: '] = j
+            else:
+                print('Learning rate is 0, hence Gradient Descent cannot be run')
         if path == 2 or path == 3:
             sol,j = newton(tol, max_iter, a, b, c, x)
             solution['Solution by Newton Method: '] = sol
