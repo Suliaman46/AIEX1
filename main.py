@@ -109,24 +109,43 @@ def run_methods(a, b, c, x):
             continue
         return solution
 
+def check_learning_rate(learning_rate):
+    if learning_rate == 0:
+        print('Learning rate was 0, please enter new non-zero learning rate to run Batch Mode')
+        learning_rate = float(input())
+        while learning_rate < 0:
+            print('Learning rate was < 0, please enter new rate to run Batch Mode')
+            learning_rate = float(input())
+    return learning_rate
 
 def batch_mode(coeff, params, dim, n, entries):
     a, b, c = coeff
     tol, max_iter, learning_rate = params
+    learning_rate = check_learning_rate(learning_rate)
     sol_vec_newton = []
+    j_vec_newton = []
     sol_vec_grad = []
+    j_vec_grad = []
     for i in range(n):
         x = []
         for i in range(dim):
             x.append(random.uniform(entries[0], entries[1]))
-        sol_vec_newton.append(newton(tol, max_iter, a, b, c, np.array(x)))
-        sol_vec_grad.append(gradient_descent(tol, learning_rate, max_iter, a, b, c, np.array(x)))
-    print('STD and MEAN for Newton \n')
+        sol_vec_newton.append((newton(tol, max_iter, a, b, c, np.array(x)))[0])
+        j_vec_newton.append((newton(tol, max_iter, a, b, c, np.array(x)))[1])
+        sol_vec_grad.append((gradient_descent(tol, learning_rate, max_iter, a, b, c, np.array(x)))[0])
+        j_vec_grad.append((gradient_descent(tol, learning_rate, max_iter, a, b, c, np.array(x)))[1])
+    print('STD and MEAN for Newton ')
     print(np.std(sol_vec_newton, axis=0))
     print(np.mean(sol_vec_newton, axis=0))
-    print('STD and MEAN for Gradient Descent \n')
+    print('\nSTD and MEAN for J(x) by Newton \n')
+    print(np.std(j_vec_newton, axis=0))
+    print(np.mean(j_vec_newton, axis=0))
+    print('\nSTD and MEAN for for Gradient Descent \n')
     print(np.std(sol_vec_grad, axis=0))
     print(np.mean(sol_vec_grad, axis=0))
+    print('\nSTD and MEAN for J(x) by Gradient Descent \n')
+    print(np.std(j_vec_grad, axis=0))
+    print(np.mean(j_vec_grad, axis=0))
 
 
 
@@ -174,3 +193,4 @@ while True:
             print('Incorrect option entered try again')
         break
     print('Incorrect option entered please try again')
+
